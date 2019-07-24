@@ -130,59 +130,59 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@gitbook/slate-base64-serializer@^0.2.45":
+"slate-base64-serializer@^0.2.45":
   version "0.2.45"
-  resolved "https://registry.yarnpkg.com/@gitbook/slate-base64-serializer/-/slate-base64-serializer-0.2.45.tgz#62b8d8405128d6b62cefd35c203cfe458c8784d2"
+  resolved "https://registry.yarnpkg.com/slate-base64-serializer/-/slate-base64-serializer-0.2.45.tgz#62b8d8405128d6b62cefd35c203cfe458c8784d2"
   dependencies:
     isomorphic-base64 "^1.0.2"
 
-"@gitbook/slate-dev-environment@^0.1.3":
+"slate-dev-environment@^0.1.3":
   version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@gitbook/slate-dev-environment/-/slate-dev-environment-0.1.3.tgz#eed305abd717d6386a7496287600ed705e304464"
+  resolved "https://registry.yarnpkg.com/slate-dev-environment/-/slate-dev-environment-0.1.3.tgz#eed305abd717d6386a7496287600ed705e304464"
   dependencies:
     is-in-browser "^1.1.3"
 
-"@gitbook/slate-dev-logger@^0.1.40":
+"slate-dev-logger@^0.1.40":
   version "0.1.40"
-  resolved "https://registry.yarnpkg.com/@gitbook/slate-dev-logger/-/slate-dev-logger-0.1.40.tgz#960ede184272329eb977a11aa6a601621c8b7a6d"
+  resolved "https://registry.yarnpkg.com/slate-dev-logger/-/slate-dev-logger-0.1.40.tgz#960ede184272329eb977a11aa6a601621c8b7a6d"
 
-"@gitbook/slate-hotkeys@^0.1.3":
+"slate-hotkeys@^0.1.3":
   version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@gitbook/slate-hotkeys/-/slate-hotkeys-0.1.3.tgz#fc28216ddad0d88e86bec42cdf78d20db741e0a8"
+  resolved "https://registry.yarnpkg.com/slate-hotkeys/-/slate-hotkeys-0.1.3.tgz#fc28216ddad0d88e86bec42cdf78d20db741e0a8"
   dependencies:
-    "@gitbook/slate-dev-environment" "^0.1.3"
+    "slate-dev-environment" "^0.1.3"
     is-hotkey "^0.1.1"
 
-"@gitbook/slate-hyperscript@^0.5.26":
+"slate-hyperscript@^0.5.26":
   version "0.5.26"
-  resolved "https://registry.yarnpkg.com/@gitbook/slate-hyperscript/-/slate-hyperscript-0.5.26.tgz#bff629c4130c477670bd6dcf840f65b299df3eea"
+  resolved "https://registry.yarnpkg.com/slate-hyperscript/-/slate-hyperscript-0.5.26.tgz#bff629c4130c477670bd6dcf840f65b299df3eea"
   dependencies:
-    "@gitbook/slate-dev-logger" "^0.1.40"
+    "slate-dev-logger" "^0.1.40"
     is-empty "^1.0.0"
     is-plain-object "^2.0.4"
 
-"@gitbook/slate-plain-serializer@^0.5.26":
+"slate-plain-serializer@^0.5.26":
   version "0.5.26"
-  resolved "https://registry.yarnpkg.com/@gitbook/slate-plain-serializer/-/slate-plain-serializer-0.5.26.tgz#6f90ef7215b955894ea373e74e1262fbdf499fa5"
+  resolved "https://registry.yarnpkg.com/slate-plain-serializer/-/slate-plain-serializer-0.5.26.tgz#6f90ef7215b955894ea373e74e1262fbdf499fa5"
   dependencies:
-    "@gitbook/slate-dev-logger" "^0.1.40"
+    "slate-dev-logger" "^0.1.40"
 
-"@gitbook/slate-prop-types@^0.4.43":
+"slate-prop-types@^0.4.43":
   version "0.4.43"
-  resolved "https://registry.yarnpkg.com/@gitbook/slate-prop-types/-/slate-prop-types-0.4.43.tgz#6f0b83d1d308709681559b0c437fd4356be473b5"
+  resolved "https://registry.yarnpkg.com/slate-prop-types/-/slate-prop-types-0.4.43.tgz#6f0b83d1d308709681559b0c437fd4356be473b5"
   dependencies:
-    "@gitbook/slate-dev-logger" "^0.1.40"
+    "slate-dev-logger" "^0.1.40"
 
-"@gitbook/slate-react@^0.13.9":
+"slate-react@^0.13.9":
   version "0.13.9"
-  resolved "https://registry.yarnpkg.com/@gitbook/slate-react/-/slate-react-0.13.9.tgz#fc1f94540331304769c3e81ba20c066a02165a21"
+  resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.13.9.tgz#fc1f94540331304769c3e81ba20c066a02165a21"
   dependencies:
-    "@gitbook/slate-base64-serializer" "^0.2.45"
-    "@gitbook/slate-dev-environment" "^0.1.3"
-    "@gitbook/slate-dev-logger" "^0.1.40"
-    "@gitbook/slate-hotkeys" "^0.1.3"
-    "@gitbook/slate-plain-serializer" "^0.5.26"
-    "@gitbook/slate-prop-types" "^0.4.43"
+    "slate-base64-serializer" "^0.2.45"
+    "slate-dev-environment" "^0.1.3"
+    "slate-dev-logger" "^0.1.40"
+    "slate-hotkeys" "^0.1.3"
+    "slate-plain-serializer" "^0.5.26"
+    "slate-prop-types" "^0.4.43"
     debug "^3.1.0"
     get-window "^1.1.1"
     is-window "^1.0.2"
@@ -193,16 +193,16 @@
     react-portal "^3.1.0"
     selection-is-backward "^1.0.0"
 
-"@gitbook/slate-schema-violations@^0.1.24":
+"slate-schema-violations@^0.1.24":
   version "0.1.24"
-  resolved "https://registry.yarnpkg.com/@gitbook/slate-schema-violations/-/slate-schema-violations-0.1.24.tgz#ab7d9f793d2943102b8c8014b9e71ab826a47ba6"
+  resolved "https://registry.yarnpkg.com/slate-schema-violations/-/slate-schema-violations-0.1.24.tgz#ab7d9f793d2943102b8c8014b9e71ab826a47ba6"
 
-"@gitbook/slate@^0.34.11":
+"slate@^0.34.11":
   version "0.34.11"
-  resolved "https://registry.yarnpkg.com/@gitbook/slate/-/slate-0.34.11.tgz#dd20daa77510c581e4b12928f48ff70beb25848b"
+  resolved "https://registry.yarnpkg.com/slate/-/slate-0.34.11.tgz#dd20daa77510c581e4b12928f48ff70beb25848b"
   dependencies:
-    "@gitbook/slate-dev-logger" "^0.1.40"
-    "@gitbook/slate-schema-violations" "^0.1.24"
+    "slate-dev-logger" "^0.1.40"
+    "slate-schema-violations" "^0.1.24"
     debug "^3.1.0"
     direction "^0.1.5"
     esrever "^0.2.0"
