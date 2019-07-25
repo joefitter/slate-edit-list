@@ -3,26 +3,9 @@
 import expect from 'expect';
 import fs from 'fs';
 import path from 'path';
-import Slate from '@gitbook/slate';
-import hyperprint from 'slate-hyperprint';
+import { Editor, Value } from 'slate';
 
 import EditList from '../lib';
-
-// Provide the value with
-function deserializeValue(plugin, value) {
-    const SCHEMA = Slate.Schema.create({
-        plugins: [plugin]
-    });
-
-    return Slate.Value.fromJS(
-        {
-            selection: value.selection,
-            document: value.document,
-            schema: SCHEMA
-        },
-        { normalize: false }
-    );
-}
 
 describe('slate-edit-list', () => {
     const tests = fs.readdirSync(__dirname);
@@ -33,26 +16,35 @@ describe('slate-edit-list', () => {
             const dir = path.resolve(__dirname, test);
             const plugin = EditList();
 
-            const input = deserializeValue(
-                plugin,
-                require(path.resolve(dir, 'input.js')).default
-            );
+            const input = require(path.resolve(dir, 'input.js')).default;
+
+            const editor = new Editor({
+                plugins: [plugin],
+                value: Value.fromJS({
+                    document: input.document,
+                    selection: input.selection
+                })
+            });
 
             const expectedPath = path.resolve(dir, 'expected.js');
-            const expected =
-                fs.existsSync(expectedPath) &&
-                deserializeValue(plugin, require(expectedPath).default);
+            let expected = require(expectedPath).default;
+
+            expected = JSON.stringify(
+                Value.fromJS({
+                    document: expected.document,
+                    selection: expected.selected
+                }).toJSON()
+            );
 
             const runChange = require(path.resolve(dir, 'change.js')).default;
 
-            const newChange = runChange(plugin, input.change());
+            const newChange = runChange(plugin, editor);
 
             if (expected) {
-                const actual = newChange.value;
+                const actual = JSON.stringify(newChange.value.toJSON());
+                // console.log(actual)
 
-                expect(hyperprint(actual, { strict: true })).toEqual(
-                    hyperprint(expected, { strict: true })
-                );
+                expect(actual).toEqual(expected);
             }
         });
     });
