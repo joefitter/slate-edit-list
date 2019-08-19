@@ -45,12 +45,12 @@ function renderBlock(props: *) {
 }
 
 class Example extends React.Component<*, *> {
+    editor: Editor;
     constructor(props) {
         super(props);
         this.call = this.call.bind(this);
     }
 
-    editor: Editor;
     state = {
         value: INITIAL_VALUE
     };

@@ -23,22 +23,31 @@ describe('slate-edit-list', () => {
                 value: Value.fromJS(input)
             });
 
-
             const expectedPath = path.resolve(dir, 'expected.js');
             const runChange = require(path.resolve(dir, 'change.js')).default;
 
-            runChange(plugin, editor)
+            return (
+                Promise.resolve()
+                    .then(() => runChange(plugin, editor))
+                    // eslint-disable-next-line consistent-return
+                    .then(() => {
+                        let expected;
 
-            let expected;
+                        try {
+                            expected = Value.fromJS(
+                                require(expectedPath).default
+                            ).toJS();
+                        } catch (e) {
+                            // eslint-disable-next-line no-console
+                            console.log('no expected val, skipping');
+                        }
 
-            try {
-              expected = Value.fromJS(require(expectedPath).default).toJS();
-            } catch (e) {}
-
-            if (expected) {
-                const actual = editor.value.toJS();
-                return expect(actual).toEqual(expected);
-            }
+                        if (expected) {
+                            const actual = editor.value.toJS();
+                            return expect(actual).toEqual(expected);
+                        }
+                    })
+            );
         });
     });
 });
