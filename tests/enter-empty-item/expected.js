@@ -9,7 +9,9 @@ export default (
                     <paragraph>First item</paragraph>
                 </list_item>
             </ul_list>
-            <paragraph />
+            <paragraph>
+                <text />
+            </paragraph>
         </document>
     </value>
 );

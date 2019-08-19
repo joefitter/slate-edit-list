@@ -1,6 +1,6 @@
 import expect from 'expect';
 
-export default function(plugin, change) {
-    const previousItem = plugin.utils.getPreviousItem(change.value);
+export default function(plugin, editor) {
+    const previousItem = editor.getPreviousItem();
     expect(previousItem.key).toBe('previous_item');
 }

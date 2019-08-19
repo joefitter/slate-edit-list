@@ -12,7 +12,9 @@ export default (
                     <paragraph>Second item</paragraph>
                 </list_item>
                 <list_item>
-                    <paragraph />
+                    <paragraph>
+                        <text />
+                    </paragraph>
                 </list_item>
             </ul_list>
         </document>

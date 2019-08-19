@@ -7,15 +7,21 @@ export default (
             <ul_list>
                 <list_item>
                     <paragraph>
+                        <text />
                         <link>First item</link>
+                        <text />
                     </paragraph>
                 </list_item>
             </ul_list>
-            <paragraph />
+            <paragraph>
+                <text />
+            </paragraph>
             <ul_list>
                 <list_item>
                     <paragraph>
+                        <text />
                         <link>Third item</link>
+                        <text />
                     </paragraph>
                 </list_item>
             </ul_list>

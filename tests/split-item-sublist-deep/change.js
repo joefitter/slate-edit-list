@@ -1,17 +1,28 @@
 import expect from 'expect';
+import { Selection, Point } from 'slate';
+import { List } from 'immutable';
 
-export default function(plugin, change) {
-    plugin.changes.splitListItem(change);
+export default function(plugin, editor) {
+    editor.splitListItem();
 
     // check new selection
-    const selectedNode = change.value.document.getTexts().get(2);
+    const selectedNode = editor.value.document.getTexts().get(2);
 
-    expect(change.value.selection.toJS()).toMatch({
-        anchorKey: selectedNode.key,
-        anchorOffset: 0,
-        focusKey: selectedNode.key,
-        focusOffset: 0
+    const selection = new Selection({
+        anchor: new Point({
+            key: selectedNode.key,
+            path: List([0, 0, 1, 1, 0, 0]),
+            offset: 0
+        }),
+        focus: new Point({
+            key: selectedNode.key,
+            path: List([0, 0, 1, 1, 0, 0]),
+            offset: 0
+        }),
+        isFocused: true
     });
 
-    return change;
+    expect(editor.value.selection.toJS()).toMatch(selection.toJS());
+
+    return editor;
 }
