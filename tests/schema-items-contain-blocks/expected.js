@@ -9,6 +9,7 @@ export default (
                     <paragraph>
                         1st
                         <link>2nd</link>
+                        <text />
                     </paragraph>
                 </list_item>
                 <list_item>

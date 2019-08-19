@@ -20,31 +20,24 @@ describe('slate-edit-list', () => {
 
             const editor = new Editor({
                 plugins: [plugin],
-                value: Value.fromJS({
-                    document: input.document,
-                    selection: input.selection
-                })
+                value: Value.fromJS(input)
             });
 
+
             const expectedPath = path.resolve(dir, 'expected.js');
-            let expected = require(expectedPath).default;
-
-            expected = JSON.stringify(
-                Value.fromJS({
-                    document: expected.document,
-                    selection: expected.selected
-                }).toJSON()
-            );
-
             const runChange = require(path.resolve(dir, 'change.js')).default;
 
-            const newChange = runChange(plugin, editor);
+            runChange(plugin, editor)
+
+            let expected;
+
+            try {
+              expected = Value.fromJS(require(expectedPath).default).toJS();
+            } catch (e) {}
 
             if (expected) {
-                const actual = JSON.stringify(newChange.value.toJSON());
-                // console.log(actual)
-
-                expect(actual).toEqual(expected);
+                const actual = editor.value.toJS();
+                return expect(actual).toEqual(expected);
             }
         });
     });

@@ -9,7 +9,9 @@ export default (
                     <paragraph>Hello World</paragraph>
                 </list_item>
                 <list_item>
-                    <paragraph />
+                    <paragraph>
+                        <text />
+                    </paragraph>
                 </list_item>
             </ul_list>
         </document>
