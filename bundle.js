@@ -379,14 +379,16 @@ function decreaseItemDepth(opts, editor) {
             type: currentList.type,
             data: currentList.data
         });
-        // Add the sublist
-        editor.insertNodeByKey(currentItem.key, currentItem.nodes.size, sublist, { normalize: false });
+        editor.withoutNormalizing(function () {
+            // Add the sublist
+            editor.insertNodeByKey(currentItem.key, currentItem.nodes.size, sublist);
 
-        editor.moveNodeByKey(currentItem.key, parentList.key, parentList.nodes.indexOf(parentItem) + 1, { normalize: false });
+            editor.moveNodeByKey(currentItem.key, parentList.key, parentList.nodes.indexOf(parentItem) + 1);
 
-        // Move the followingItems to the sublist
-        followingItems.forEach(function (item, index) {
-            return editor.moveNodeByKey(item.key, sublist.key, sublist.nodes.size + index, { normalize: false });
+            // Move the followingItems to the sublist
+            followingItems.forEach(function (item, index) {
+                return editor.moveNodeByKey(item.key, sublist.key, sublist.nodes.size + index);
+            });
         });
     } else {
         editor.moveNodeByKey(currentItem.key, parentList.key, parentList.nodes.indexOf(parentItem) + 1);
@@ -463,11 +465,10 @@ destKey) {
         data: currentList.data
     });
 
-    editor.insertNodeByKey(destKey, lastIndex, newSublist, {
-        normalize: false
+    return editor.withoutNormalizing(function () {
+        editor.insertNodeByKey(destKey, lastIndex, newSublist);
+        editor.moveNodeByKey(item.key, newSublist.key, 0);
     });
-
-    return editor.moveNodeByKey(item.key, newSublist.key, 0);
 }
 
 exports.default = increaseItemDepth;
@@ -553,35 +554,33 @@ function unwrapList(opts, editor) {
         return editor;
     }
 
-    // Unwrap the items from their list
-    items.forEach(function (item) {
-        return editor.unwrapNodeByKey(item.key, { normalize: false });
-    });
+    return editor.withoutNormalizing(function () {
+        // Unwrap the items from their list
+        items.forEach(function (item) {
+            return editor.unwrapNodeByKey(item.key);
+        });
 
-    // Parent of the list of the items
-    var firstItem = items.first();
-    var parent = editor.value.document.getParent(firstItem.key);
+        // Parent of the list of the items
+        var firstItem = items.first();
+        var parent = editor.value.document.getParent(firstItem.key);
 
-    var index = parent.nodes.findIndex(function (node) {
-        return node.key === firstItem.key;
-    });
+        var index = parent.nodes.findIndex(function (node) {
+            return node.key === firstItem.key;
+        });
 
-    // Unwrap the items' children
-    items.forEach(function (item) {
-        item.nodes.forEach(function (node) {
-            editor.moveNodeByKey(node.key, parent.key, index, {
-                normalize: false
+        // Unwrap the items' children
+        items.forEach(function (item) {
+            item.nodes.forEach(function (node) {
+                editor.moveNodeByKey(node.key, parent.key, index);
+                index += 1;
             });
-            index += 1;
+        });
+
+        // Finally, remove the now empty items
+        items.forEach(function (item) {
+            return editor.removeNodeByKey(item.key);
         });
     });
-
-    // Finally, remove the now empty items
-    items.forEach(function (item) {
-        return editor.removeNodeByKey(item.key, { normalize: false });
-    });
-
-    return editor;
 }
 exports.default = unwrapList;
 
@@ -604,28 +603,26 @@ function wrapInList(opts, editor, type, data) {
     var selectedBlocks = getHighestSelectedBlocks(editor);
     type = type || opts.types[0];
 
-    // Wrap in container
-    editor.wrapBlock({
-        type: type,
-        data: _slate.Data.create(data)
-    }, { normalize: false });
+    return editor.withoutNormalizing(function () {
+        // Wrap in container
+        editor.wrapBlock({
+            type: type,
+            data: _slate.Data.create(data)
+        });
 
-    // Wrap in list items
-    selectedBlocks.forEach(function (node) {
-        if (editor.isList(node)) {
-            // Merge its items with the created list
-            node.nodes.forEach(function (_ref) {
-                var key = _ref.key;
-                return editor.unwrapNodeByKey(key, { normalize: false });
-            });
-        } else {
-            editor.wrapBlockByKey(node.key, opts.typeItem, {
-                normalize: false
-            });
-        }
+        // Wrap in list items
+        selectedBlocks.forEach(function (node) {
+            if (editor.isList(node)) {
+                // Merge its items with the created list
+                node.nodes.forEach(function (_ref) {
+                    var key = _ref.key;
+                    return editor.unwrapNodeByKey(key);
+                });
+            } else {
+                editor.wrapBlockByKey(node.key, opts.typeItem);
+            }
+        });
     });
-
-    return editor.normalize();
 }
 
 /**
@@ -648,7 +645,7 @@ function getHighestSelectedBlocks(editor) {
     var startPath = ancestor.getPath(startBlock.key);
     var endPath = ancestor.getPath(endBlock.key);
 
-    return ancestor.nodes.slice(startPath[0], endPath[0] + 1);
+    return ancestor.nodes.slice(startPath.get(0), endPath.get(0) + 1);
 }
 
 exports.default = wrapInList;
@@ -841,7 +838,7 @@ function onEnter(event, editor, opts, next) {
         editor.delete();
     }
 
-    if (currentItem.isEmpty()) {
+    if (editor.isVoid(currentItem) || currentItem.text === '') {
         // Block is empty, we exit the list
         if (editor.getItemDepth() > 1) {
             return editor.decreaseItemDepth();
@@ -1127,7 +1124,7 @@ function getItemsAtRange(opts, editor, range) {
         var startPath = ancestor.getPath(startBlock.key);
         var endPath = ancestor.getPath(endBlock.key);
 
-        return ancestor.nodes.slice(startPath[0], endPath[0] + 1);
+        return ancestor.nodes.slice(startPath.get(0), endPath.get(0) + 1);
     } else if (ancestor.type === opts.typeItem) {
         // The ancestor is the highest list item that covers the range
         return (0, _immutable.List)([ancestor]);
@@ -1390,9 +1387,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Create a schema definition with rules to normalize lists
  */
 function schema(opts) {
-    return {
+    var constructedSchema = {
         blocks: (0, _defineProperty3.default)({}, opts.typeItem, {
-            parent: { types: opts.types },
+            parent: opts.types.map(function (type) {
+                return { type: type };
+            }),
             nodes: [{
                 match: {
                     object: 'block'
@@ -1401,8 +1400,8 @@ function schema(opts) {
 
             normalize: normalize({
                 parent_type_invalid: function parent_type_invalid(editor, error) {
-                    return editor.unwrapBlockByKey(error.node.key, {
-                        normalize: false
+                    return editor.withoutNormalizing(function () {
+                        return editor.unwrapBlockByKey(error.node.key);
                     });
                 },
                 child_object_invalid: function child_object_invalid(editor, error) {
@@ -1411,6 +1410,25 @@ function schema(opts) {
             })
         })
     };
+
+    opts.types.forEach(function (type) {
+        constructedSchema.blocks[type] = {
+            nodes: [{
+                match: {
+                    type: opts.typeItem
+                }
+            }],
+            normalize: normalize({
+                child_type_invalid: function child_type_invalid(editor, error) {
+                    return editor.withoutNormalizing(function () {
+                        return editor.wrapBlockByKey(error.child.key, opts.typeItem);
+                    });
+                }
+            })
+        };
+    });
+
+    return constructedSchema;
 }
 
 /*
