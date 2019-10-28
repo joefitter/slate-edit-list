@@ -943,7 +943,7 @@ function onKeyDown(opts, event, editor, next) {
         case KEY_BACKSPACE:
             return _handlers.onBackspace.apply(undefined, args);
         default:
-            return undefined;
+            return next();
     }
 }
 
